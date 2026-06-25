@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Ahmad Azim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #4361ee;
+      --blue-glow:  rgba(67, 97, 238, 0.18);
+      --dark:       #ffffff;
+      --gray:       #aaa;
+      --gray-dim:   #778899;
+      --red:        #ff6b6b;
+      --orange:     #f4a261;
+      --green:      #06d6a0;
+      --bg:         #0d0d16;
+      --surface:    #13131f;
+      --surface2:   #1c1c2e;
+      --border:     #2a2a3a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ══ FADE IN ══ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.85s cubic-bezier(.4,0,.2,1),
+                  transform 0.85s cubic-bezier(.4,0,.2,1);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-delay-1 { transition-delay: 0.10s; }
+    .fade-delay-2 { transition-delay: 0.22s; }
+    .fade-delay-3 { transition-delay: 0.34s; }
+    .fade-delay-4 { transition-delay: 0.46s; }
+    .fade-delay-5 { transition-delay: 0.58s; }
+
+    /* ══ MUSIC PLAYER ══ */
+    #music-player {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      background: var(--surface2);
+      border: 0.5px solid var(--border);
+      border-radius: 50px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      transition: opacity .3s;
+    }
+    #music-player .song-name {
+      font-size: 12px;
+      color: #bbb;
+      font-weight: 500;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #music-player .song-name span { color: var(--blue); }
+    #music-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--blue);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; color: #fff;
+      flex-shrink: 0;
+      transition: opacity .2s;
+    }
+    #music-btn:hover { opacity: 0.85; }
+    #mute-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: #aaa;
+      flex-shrink: 0;
+      transition: color .2s;
+    }
+    #mute-btn:hover { color: var(--blue); }
+
+    /* ══ BUTTON WIGGLE ══ */
+@keyframes wiggle {
+  0%   { transform: rotate(0deg) scale(1); }
+  15%  { transform: rotate(-4deg) scale(1.05); }
+  30%  { transform: rotate(4deg) scale(1.05); }
+  45%  { transform: rotate(-3deg) scale(1.07); }
+  60%  { transform: rotate(3deg) scale(1.07); }
+  75%  { transform: rotate(-2deg) scale(1.05); }
+  90%  { transform: rotate(1deg) scale(1.02); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.btn-primary:hover,
+.btn-outline:hover,
+.btn-ghost:hover,
+.nav-cta:hover,
+#music-btn:hover,
+#mute-btn:hover,
+.social-icon:hover,
+.hobi-tag:hover {
+  animation: wiggle 0.55s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+    /* ══════════════════════════════════════
+       NAVBAR
+    ══════════════════════════════════════ */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 64px;
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 20px; color: var(--dark);
+      display: flex; align-items: center; gap: 6px; text-decoration: none;
+    }
+    .nav-logo i    { font-size: 22px; color: var(--blue); }
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; font-size: 13px; color: #bbb;
+      font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: var(--blue); color: #fff; border: none;
+      padding: 11px 24px; border-radius: 50px; font-size: 13px;
+      font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: 0.88; }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    #home {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 72px 64px 56px;
+      gap: 48px;
+      min-height: calc(100vh - 70px);
+    }
+    .hero-left { position: relative; }
+    .hero-eyebrow {
+      font-size: 15px; color: var(--gray); font-weight: 500;
+      margin-bottom: 10px; letter-spacing: 0.03em;
+    }
+    .hero-h1 { font-size: 56px; font-weight: 800; line-height: 1.08; }
+    .hero-h1 .accent { color: var(--blue); }
+    .hero-sub {
+      font-size: 14px; color: var(--gray-dim); line-height: 1.75;
+      margin: 20px 0 36px; max-width: 440px;
+    }
+    .hero-btns { display: flex; gap: 14px; align-items: center; }
+    .btn-primary {
+      background: var(--blue); color: #fff; border: none;
+      padding: 14px 30px; border-radius: 50px; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: 'Poppins', sans-serif;
+      display: inline-flex; align-items: center; gap: 8px; transition: opacity .2s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-outline {
+      background: transparent; color: var(--blue); border: 1.5px solid var(--blue);
+      padding: 13px 30px; border-radius: 50px; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: 'Poppins', sans-serif;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background .2s, color .2s;
+    }
+    .btn-outline:hover { background: var(--blue); color: #fff; }
+    .btn-ghost {
+      background: transparent; color: var(--dark); border: 1px solid var(--border);
+      padding: 13px 30px; border-radius: 50px; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: 'Poppins', sans-serif;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: border-color .2s, color .2s; text-decoration: none;
+    }
+    .btn-ghost:hover { border-color: var(--blue); color: #7a9fff; }
+    .hero-stats { display: flex; align-items: center; margin-top: 52px; }
+    .stat-item { padding: 0 28px; }
+    .stat-item:first-child { padding-left: 0; }
+    .stat-num { font-size: 28px; font-weight: 800; line-height: 1; }
+    .stat-num span { color: var(--blue); }
+    .stat-label { font-size: 11px; color: #aaa; margin-top: 5px; font-weight: 500; }
+    .stat-divider { width: 1px; height: 40px; background: var(--border); }
+    .dot-grid-tl { position: absolute; top: -10px; right: 0; opacity: 0.2; pointer-events: none; }
+    .dot-grid-bl { position: absolute; bottom: 0; left: -10px; opacity: 0.15; pointer-events: none; }
+    .hero-right {
+      position: relative; display: flex;
+      justify-content: center; align-items: center; height: 500px;
+    }
+    .hero-bg-circle {
+      position: absolute; width: 400px; height: 400px;
+      border-radius: 50%; background: #1a1f3a; z-index: 0;
+    }
+    .hero-img-wrap {
+      position: relative; z-index: 1; width: 300px; height: 380px;
+      background: linear-gradient(160deg, #1e2a5e 0%, #2d3f8f 100%);
+      border-radius: 130px 130px 90px 90px;
+      display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+    }
+    .badge {
+      position: absolute; z-index: 2; background: var(--surface2); border-radius: 16px;
+      padding: 12px 16px; border: 0.5px solid #2a2a45; box-shadow: 0 6px 24px rgba(0,0,0,.4);
+    }
+    .badge .num { font-size: 22px; font-weight: 800; line-height: 1; }
+    .badge .lbl { font-size: 11px; color: var(--gray-dim); margin-top: 3px; line-height: 1.4; }
+    .badge-exp    { top: 40px; left: 0; }
+    .badge-exp .num { color: var(--blue); }
+    .badge-rating { bottom: 130px; left: -10px; display: flex; align-items: center; gap: 8px; }
+    .badge-client { bottom: 40px; right: 0; }
+    .badge-client .num { color: var(--red); }
+    .stars { color: #ffc107; font-size: 13px; letter-spacing: 1px; }
+    .rating-text { font-size: 12px; color: #ccc; font-weight: 600; }
+    .social-col {
+      position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 12px; z-index: 3;
+    }
+    .social-icon {
+      width: 38px; height: 38px; background: var(--surface2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 0.5px solid #2a2a45; font-size: 16px; color: var(--blue);
+      transition: background .2s, color .2s; text-decoration: none; cursor: pointer;
+    }
+    .social-icon:hover { background: var(--blue); color: #fff; }
+
+    /* ══════════════════════════════════════
+       ABOUT
+    ══════════════════════════════════════ */
+    #about {
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 72px; padding: 100px 64px;
+      min-height: 100vh; position: relative; overflow: hidden; background: var(--surface);
+    }
+    #about::before {
+      content: ''; position: absolute; width: 500px; height: 500px;
+      border-radius: 50%; background: var(--blue-glow); filter: blur(100px);
+      top: -100px; left: -100px; pointer-events: none;
+    }
+    .about-img-wrap { position: relative; display: flex; justify-content: center; align-items: center; }
+    .img-ring { position: relative; width: 360px; height: 420px; }
+    .img-ring::before {
+      content: ''; position: absolute; inset: -6px;
+      border-radius: 140px 140px 100px 100px;
+      background: linear-gradient(160deg, var(--blue) 0%, transparent 60%);
+      opacity: 0.5; z-index: 0;
+    }
+    .img-card {
+      position: relative; z-index: 1; width: 100%; height: 100%;
+      background: linear-gradient(160deg, #1a2060 0%, #0f1540 100%);
+      border-radius: 134px 134px 96px 96px; overflow: hidden;
+      display: flex; align-items: flex-end; justify-content: center;
+      border: 1px solid #2a2a50;
+    }
+    .info-pill {
+      position: absolute; z-index: 3; background: var(--surface2);
+      border: 0.5px solid var(--border); border-radius: 50px; padding: 10px 20px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.4); white-space: nowrap;
+    }
+    .info-pill.pill-top    { top: 20px;    right: -30px; }
+    .info-pill.pill-bottom { bottom: 30px; left: -30px; }
+    .pill-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .pill-icon.blue  { background: rgba(67,97,238,.2);  color: #7a9fff; }
+    .pill-icon.green { background: rgba(6,214,160,.15); color: #06d6a0; }
+    .pill-text .pill-num { font-size: 15px; font-weight: 700; line-height: 1; }
+    .pill-text .pill-lbl { font-size: 11px; color: var(--gray-dim); margin-top: 2px; }
+    .about-content { position: relative; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(67,97,238,.12); border: 0.5px solid rgba(67,97,238,.3);
+      color: #7a9fff; font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 50px;
+      margin-bottom: 18px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .about-h2 { font-size: 42px; font-weight: 800; line-height: 1.1; margin-bottom: 8px; }
+    .about-h2 .accent { color: var(--blue); }
+    .about-tagline { font-size: 14px; color: #7a9fff; font-weight: 500; margin-bottom: 20px; font-style: italic; }
+    .about-desc { font-size: 14px; color: var(--gray-dim); line-height: 1.8; margin-bottom: 36px; max-width: 480px; }
+    .skills-label { font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 18px; }
+    .skill-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+    .skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+    .skill-name { font-size: 13px; font-weight: 600; }
+    .skill-pct  { font-size: 12px; font-weight: 700; color: var(--gray); }
+    .bar-track  { width: 100%; height: 7px; background: var(--surface2); border-radius: 50px; overflow: hidden; }
+    .bar-fill   { height: 100%; border-radius: 50px; position: relative; width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+    .bar-fill::after {
+      content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%);
+      width: 12px; height: 12px; border-radius: 50%; background: inherit;
+    }
+    .bar-ux      { background: linear-gradient(90deg,#4361ee,#7a9fff); }
+    .bar-web     { background: linear-gradient(90deg,#f4a261,#ffcc80); }
+    .bar-app     { background: linear-gradient(90deg,#06d6a0,#6effc7); }
+    .bar-graphic { background: linear-gradient(90deg,#e040fb,#b39ddb); }
+    .about-cta { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+    /* ══════════════════════════════════════
+       BIODATA
+    ══════════════════════════════════════ */
+    #biodata {
+      padding: 100px 64px; min-height: 100vh; position: relative; overflow: hidden;
+    }
+    #biodata::after {
+      content: ''; position: absolute; width: 600px; height: 600px;
+      border-radius: 50%; background: rgba(67,97,238,.08); filter: blur(120px);
+      bottom: -200px; right: -100px; pointer-events: none;
+    }
+    .biodata-header { text-align: center; margin-bottom: 72px; }
+    .biodata-header .section-tag { margin-bottom: 16px; }
+    .biodata-header h2 { font-size: 40px; font-weight: 800; line-height: 1.1; }
+    .biodata-header h2 .accent { color: var(--blue); }
+    .biodata-header p { font-size: 14px; color: var(--gray-dim); margin-top: 12px; }
+    .bio-divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+      border-radius: 4px; margin: 16px auto 0;
+    }
+    .bio-card {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 24px; padding: 40px 48px; margin-bottom: 32px;
+      position: relative; overflow: hidden; transition: border-color .3s;
+    }
+    .bio-card:hover { border-color: rgba(67,97,238,.4); }
+    .bio-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%; background: var(--blue); border-radius: 4px 0 0 4px;
+    }
+    .bio-card.card-green::before  { background: var(--green); }
+    .bio-card.card-orange::before { background: var(--orange); }
+    .bio-card.card-red::before    { background: var(--red); }
+    .card-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 18px; font-weight: 700; margin-bottom: 20px;
+    }
+    .card-title-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .icon-blue   { background: rgba(67,97,238,.15);   color: #7a9fff; }
+    .icon-green  { background: rgba(6,214,160,.12);   color: #06d6a0; }
+    .icon-orange { background: rgba(244,162,97,.12);  color: #f4a261; }
+    .icon-red    { background: rgba(255,107,107,.12); color: var(--red); }
+    .card-body { font-size: 14px; color: var(--gray-dim); line-height: 1.9; }
+    .card-body a {
+      color: #7a9fff; text-decoration: none;
+      border-bottom: 0.5px solid rgba(122,159,255,.3); transition: border-color .2s, color .2s;
+    }
+    .card-body a:hover { color: #fff; border-color: #fff; }
+    .card-img {
+      width: 100%; max-width: 560px; border-radius: 16px;
+      margin: 24px auto 0; overflow: hidden; border: 1px solid var(--border); display: block;
+    }
+    .card-img img { width: 100%; height: auto; display: block; border-radius: 16px; }
+    .timeline { margin-top: 24px; display: flex; flex-direction: column; gap: 0; }
+    .tl-item  { display: flex; gap: 20px; position: relative; }
+    .tl-left  { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .tl-dot   { width: 14px; height: 14px; border-radius: 50%; background: var(--blue); border: 2px solid var(--bg); flex-shrink: 0; margin-top: 4px; }
+    .tl-dot.green  { background: var(--green); }
+    .tl-dot.orange { background: var(--orange); }
+    .tl-dot.red    { background: var(--red); }
+    .tl-line  { width: 2px; background: var(--border); flex: 1; margin: 4px 0; min-height: 30px; }
+    .tl-content { padding-bottom: 28px; }
+    .tl-year  { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 4px; }
+    .tl-year.green  { color: var(--green); }
+    .tl-year.orange { color: var(--orange); }
+    .tl-title { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+    .tl-desc  { font-size: 13px; color: var(--gray-dim); line-height: 1.7; }
+    .tl-desc a { color: #7a9fff; text-decoration: none; }
+    .tl-desc a:hover { color: #fff; }
+    .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .mini-card {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 20px; padding: 28px 32px; transition: border-color .3s;
+    }
+    .mini-card:hover { border-color: rgba(67,97,238,.4); }
+    .mini-card-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 700; margin-bottom: 16px;
+    }
+    .mini-card-title i { font-size: 18px; color: var(--blue); }
+    .mini-card p { font-size: 13px; color: var(--gray-dim); line-height: 1.8; }
+    .mini-card p a { color: #7a9fff; text-decoration: none; }
+    .mini-card p a:hover { color: #fff; }
+    .mini-card .card-img { max-width: 100%; margin-top: 20px; }
+    .hobi-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .hobi-tag {
+      background: var(--surface2); border: 0.5px solid var(--border);
+      border-radius: 50px; padding: 6px 16px;
+      font-size: 12px; font-weight: 600; color: #bbb;
+      display: flex; align-items: center; gap: 6px; text-decoration: none;
+      transition: background .2s, border-color .2s, color .2s; cursor: pointer;
+    }
+    .hobi-tag:hover { background: rgba(67,97,238,.15); border-color: var(--blue); color: #7a9fff; }
+    .hobi-tag i { font-size: 14px; color: var(--blue); }
+
+    /* ══════════════════════════════════════
+       SCHOOL
+    ══════════════════════════════════════ */
+    #school {
+      padding: 100px 64px; min-height: 100vh; background: var(--surface);
+      position: relative; overflow: hidden;
+    }
+    #school::before {
+      content: ''; position: absolute; width: 500px; height: 500px;
+      border-radius: 50%; background: rgba(6,214,160,.06); filter: blur(120px);
+      top: -100px; right: -100px; pointer-events: none;
+    }
+    .school-header { text-align: center; margin-bottom: 60px; }
+    .school-header h2 { font-size: 40px; font-weight: 800; }
+    .school-header h2 .accent { color: var(--blue); }
+    .school-header p { font-size: 14px; color: var(--gray-dim); margin-top: 12px; }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      background: var(--surface); border-top: 0.5px solid var(--border);
+      text-align: center; padding: 32px; font-size: 13px; color: #555;
+    }
+    footer span { color: var(--blue); }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      #home { grid-template-columns: 1fr; padding: 48px 24px 40px; text-align: center; }
+      .hero-h1 { font-size: 40px; }
+      .hero-sub, .about-desc { margin-left: auto; margin-right: auto; }
+      .hero-btns, .hero-stats, .about-cta { justify-content: center; }
+      .hero-right { height: 380px; }
+      .hero-bg-circle { width: 300px; height: 300px; }
+      .hero-img-wrap { width: 220px; height: 280px; }
+      .social-col { right: 0; }
+      #about { grid-template-columns: 1fr; padding: 60px 24px; gap: 48px; }
+      .about-h2 { font-size: 32px; }
+      .img-ring { width: 280px; height: 330px; }
+      .info-pill.pill-top    { right: 0; }
+      .info-pill.pill-bottom { left: 0; }
+      #biodata, #school { padding: 60px 24px; }
+      .bio-card { padding: 28px 24px; }
+      .bio-grid { grid-template-columns: 1fr; }
+      .biodata-header h2, .school-header h2 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ AUDIO ══ -->
+  <audio id="bg-audio" loop>
+    <source src="audio/Tentang Bulan (Instrumental Version).mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ══ MUSIC PLAYER ══ -->
+  <div id="music-player">
+    <button id="music-btn" title="Play/Pause">
+      <i class="ti ti-player-pause-filled" id="play-icon"></i>
+    </button>
+    <div class="song-name">
+      <span>♪</span> Tentang Bulan — Instrumental
+    </div>
+    <button id="mute-btn" title="Mute/Unmute">
+      <i class="ti ti-volume" id="vol-icon"></i>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════ -->
+  <nav>
+    <a class="nav-logo" href="#home">
+      <i class="ti ti-diamonds" aria-hidden="true"></i>
+      Ahmad<span> Azim</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">Tentang Saya</a></li>
+      <li><a href="#biodata">Biodata</a></li>
+      <li><a href="#school">Zaman Persekolahan</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('biodata').scrollIntoView({behavior:'smooth'})">Kenali Saya</button>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       LANDING 1 — HERO
+  ══════════════════════════════════════ -->
+  <section id="home">
+    <div class="hero-left fade-in">
+      <svg class="dot-grid-bl" width="80" height="80" viewBox="0 0 80 80" aria-hidden="true">
+        <defs><pattern id="dL" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#4361ee"/></pattern></defs>
+        <rect width="80" height="80" fill="url(#dL)"/>
+      </svg>
+      <p class="hero-eyebrow">Hi, saya</p>
+      <h1 class="hero-h1">Ahmad<br><span class="accent">Azim</span></h1>
+      <p class="hero-sub">
+        Pelajar Diploma Pengurusan Maklumat di UiTM Rembau. Seorang yang kreatif,
+        bersemangat, dan berminat dalam reka bentuk digital serta pengalaman pengguna.
+      </p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('biodata').scrollIntoView({behavior:'smooth'})">
+          <i class="ti ti-user" aria-hidden="true"></i> Biodata Saya
+        </button>
+        <button class="btn-outline" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+          <i class="ti ti-eye" aria-hidden="true"></i> Tentang Saya
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">30<span>+</span></div>
+          <div class="stat-label">Juzuk Al-Quran</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">8<span>th</span></div>
+          <div class="stat-label">Anak ke-8</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">1<span>st</span></div>
+          <div class="stat-label">Tahun berkahwin</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right fade-in fade-delay-2">
+      <svg class="dot-grid-tl" width="90" height="90" viewBox="0 0 90 90" aria-hidden="true">
+        <defs><pattern id="dR" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#4361ee"/></pattern></defs>
+        <rect width="90" height="90" fill="url(#dR)"/>
+      </svg>
+      <div class="hero-bg-circle"></div>
+      <div class="hero-img-wrap">
+        <img src="images/gambar azim.jpeg" alt="Ahmad Azim"
+             style="width:100%;height:100%;object-fit:cover;object-position:top;">
+      </div>
+      <div class="badge badge-exp">
+        <div class="num">Ahmad</div>
+        <div class="lbl">Teguh dalam prinsip<br>tenang dalam tindakan</div>
+      </div>
+      <div class="badge badge-rating">
+        <span class="stars">★★★★★</span>
+        <span class="rating-text">Perwatakan</span>
+      </div>
+      <div class="badge badge-client">
+        <div class="num">2001</div>
+        <div class="lbl">Tahun<br>Kelahiran</div>
+      </div>
+      <div class="social-col">
+        <a class="social-icon" href="https://web.facebook.com/teammenyoppinguk" target="_blank" aria-label="Facebook">
+          <i class="ti ti-brand-facebook" aria-hidden="true"></i>
+        </a>
+        <a class="social-icon" href="https://www.instagram.com/a_jeemm/" target="_blank" aria-label="Instagram">
+          <i class="ti ti-brand-instagram" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       LANDING 2 — ABOUT ME
+  ══════════════════════════════════════ -->
+  <section id="about">
+    <div class="about-img-wrap fade-in">
+      <div class="img-ring">
+        <div class="img-card">
+          <img src="images/gambar suit.jpeg" alt="Ahmad Azim"
+               style="width:100%;height:100%;object-fit:cover;object-position:top;">
+        </div>
+      </div>
+      <div class="info-pill pill-top">
+        <div class="pill-icon blue"><i class="ti ti-school" aria-hidden="true"></i></div>
+        <div class="pill-text">
+          <div class="pill-num">UiTM Rembau</div>
+          <div class="pill-lbl">Diploma Pengurusan Maklumat</div>
+        </div>
+      </div>
+      <div class="info-pill pill-bottom">
+        <div class="pill-icon green"><i class="ti ti-book" aria-hidden="true"></i></div>
+        <div class="pill-text">
+          <div class="pill-num">Semester Akhir</div>
+          <div class="pill-lbl">Tahun Ke-3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-content fade-in fade-delay-2">
+      <div class="section-tag"><i class="ti ti-user" aria-hidden="true"></i> Tentang Saya</div>
+      <h2 class="about-h2">Ahmad <span class="accent">Azim</span><br>Bin Ab Gafa</h2>
+      <p class="about-tagline">— Kerja Keras, Hasil Jelas</p>
+      <p class="about-desc">
+        Dilahirkan di Taiping, Perak. Seorang yang telah melalui pelbagai pengalaman hidup —
+        dari hafal Al-Quran, berniaga di UK, hingga melanjutkan pengajian Diploma di UiTM.
+        Kini bergelar suami sejak 1 Februari 2025.
+      </p>
+      <p class="skills-label">Keupayaan &amp; Kemahiran</p>
+      <div class="skill-list">
+        <div>
+          <div class="skill-header"><span class="skill-name">Hafalan Al-Quran</span><span class="skill-pct">100%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-ux" data-width="100"></div></div>
+        </div>
+        <div>
+          <div class="skill-header"><span class="skill-name">Pengurusan Maklumat</span><span class="skill-pct">89%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-web" data-width="89"></div></div>
+        </div>
+        <div>
+          <div class="skill-header"><span class="skill-name">Komunikasi</span><span class="skill-pct">80%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-app" data-width="80"></div></div>
+        </div>
+        <div>
+          <div class="skill-header"><span class="skill-name">Kerjasama Pasukan</span><span class="skill-pct">77%</span></div>
+          <div class="bar-track"><div class="bar-fill bar-graphic" data-width="77"></div></div>
+        </div>
+      </div>
+      <div class="about-cta">
+        <button class="btn-primary" onclick="document.getElementById('school').scrollIntoView({behavior:'smooth'})">
+          <i class="ti ti-book" aria-hidden="true"></i> Perjalanan Hidup
+        </button>
+        <a href="https://wa.me/601128031239" target="_blank" class="btn-ghost">
+          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> Hubungi Saya
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       LANDING 3 — BIODATA AHMAD
+  ══════════════════════════════════════ -->
+  <section id="biodata">
+    <div class="biodata-header fade-in">
+      <div class="section-tag" style="margin:0 auto 16px;">
+        <i class="ti ti-id-badge" aria-hidden="true"></i> Biodata Ahmad
+      </div>
+      <h2>Biodata <span class="accent">Ahmad Azim</span></h2>
+      <p>Kisah perjalanan hidup seorang anak muda dari Taiping ke UiTM Rembau</p>
+      <div class="bio-divider"></div>
+    </div>
+
+    <div class="bio-card fade-in fade-delay-1">
+      <div class="card-title">
+        <div class="card-title-icon icon-blue"><i class="ti ti-user-circle" aria-hidden="true"></i></div>
+        Latar Belakang
+      </div>
+      <div class="card-body">
+        <p>
+          Ahmad Azim Bin Ab Gafa lahir di Taiping, Perak pada <strong style="color:#fff">25 September 2001</strong>.
+          Beliau merupakan anak ke-8 dari 8 adik beradik. Kini sedang meneruskan pengajian
+          Diploma dalam bidang Pengurusan Maklumat di
+          <a href="https://nsembilan.uitm.edu.my/rembau/" target="_blank">Universiti Teknologi MARA, Kampus Rembau</a>.
+        </p>
+        <br>
+        <p>
+          Beliau dilahir dari hasil perkahwinan ayahnya
+          <a href="https://web.facebook.com/hjabgafa.keme" target="_blank">Ab Gafa Bin Keme</a>
+          bersama ibunya
+          <a href="https://web.facebook.com/hasnah.mohdyusoff.18" target="_blank">Hasnah Binti Mohd Yusoff</a>.
+          Membesar di Taiping sehingga umur 3 tahun, kemudian berpindah ke Lahad Datu, Sabah mengikuti
+          ayahnya yang bertugas sebagai Senior Manager Estate bagi syarikat
+          <a href="https://bousteadplantations.com.my/overview/" target="_blank">Boustead Plantations Sdn Bhd</a>.
+          Pada umur 5 tahun, sekeluarga berpindah ke Cheras, Selangor dan menyewa rumah di Bandar Tun Hussein Onn.
+        </p>
+        <div class="card-img">
+          <img src="images/abah dan mak azim.jpeg" alt="Ayah dan Ibu Ahmad">
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-grid">
+      <div class="mini-card fade-in fade-delay-2">
+        <div class="mini-card-title">
+          <i class="ti ti-heart" aria-hidden="true"></i>
+          Status Perkahwinan
+        </div>
+        <p>
+          Pada <strong style="color:#fff">1 Februari 2025</strong>, Ahmad telah bergelar suami kepada
+          <strong style="color:#fff">Arjannahtul Adibah Binti Saiful</strong>.
+          Perkenalan mereka bermula di Instagram — Adibah yang memulakan perbualan.
+          Selepas hampir 6 bulan berkenalan, Ahmad bertunang dengan Adibah pada
+          <strong style="color:#fff">31 Disember 2023</strong>.
+          Akhirnya, mereka melangsungkan perkahwinan pada 1 Februari 2025 selepas 1 tahun 1 bulan bertunang —
+          semasa Ahmad Azim Semester ke-2 di UiTM Rembau.
+        </p>
+        <div class="card-img">
+          <img src="images/WhatsApp Image 2026-06-22 at 1.46.05 AM.jpeg" alt="Perkahwinan Ahmad Azim dan Adibah">
+        </div>
+      </div>
+
+      <div class="mini-card fade-in fade-delay-3">
+        <div class="mini-card-title">
+          <i class="ti ti-mood-happy" aria-hidden="true"></i>
+          Hobi &amp; Minat
+        </div>
+        <p>Ahmad mempunyai pelbagai minat yang membentuk peribadi beliau:</p>
+        <div class="hobi-tags">
+          <a href="video/Video mancing.mp4" target="_blank" class="hobi-tag">
+            <i class="ti ti-fish" aria-hidden="true"></i> Memancing
+          </a>
+          <a href="images/usahawan.jpeg" target="_blank" class="hobi-tag">
+            <i class="ti ti-shopping-cart" aria-hidden="true"></i> Menjual
+          </a>
+          <a href="images/kereta.jpeg" target="_blank" class="hobi-tag">
+            <i class="ti ti-car" aria-hidden="true"></i> Kereta
+          </a>
+          <a href="video/Video hiking.mp4" target="_blank" class="hobi-tag">
+            <i class="ti ti-mountain" aria-hidden="true"></i> Mendaki
+          </a>
+          <a href="images/kebun.jpeg" target="_blank" class="hobi-tag">
+            <i class="ti ti-tree" aria-hidden="true"></i> Berkebun
+          </a>
+          <a href="images/gmbr travel.jpeg" target="_blank" class="hobi-tag">
+            <i class="ti ti-plane" aria-hidden="true"></i> Bercuti
+          </a>
+          <a href="images/bola.jpeg" target="_blank" class="hobi-tag">
+            <i class="ti ti-shoe" aria-hidden="true"></i> Bola Sepak
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       LANDING 4 — ZAMAN PERSEKOLAHAN
+  ══════════════════════════════════════ -->
+  <section id="school">
+    <div class="school-header fade-in">
+      <div class="section-tag" style="margin:0 auto 16px;">
+        <i class="ti ti-school" aria-hidden="true"></i> Zaman Persekolahan
+      </div>
+      <h2>Perjalanan <span class="accent">Akademik</span></h2>
+      <p>Dari sekolah rendah sehingga ke UiTM Rembau</p>
+      <div class="bio-divider"></div>
+    </div>
+
+    <div class="bio-card card-green fade-in fade-delay-1">
+      <div class="card-title">
+        <div class="card-title-icon icon-green"><i class="ti ti-school" aria-hidden="true"></i></div>
+        Zaman Persekolahan &amp; Perjalanan Hidup
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year">Awal Persekolahan</div>
+            <div class="tl-title">Sekolah Rendah Agama Tinggi Al-Rahman</div>
+            <div class="tl-desc">Darjah 1 dan darjah 2. <a href="https://alrahman.edu.my/" target="_blank">Sekolah Rendah Agama Tinggi Al-Rahman</a>.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot green"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year green">2010 — Pindah ke Negeri Sembilan</div>
+            <div class="tl-title">SK Batang Benar, Pajam</div>
+            <div class="tl-desc">Sekeluarga berpindah ke Pajam, Negeri Sembilan. Mendapat keputusan UPSR <strong style="color:#fff">2A 3B</strong>.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot orange"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year orange">Selepas UPSR — 6 Tahun Tahfiz</div>
+            <div class="tl-title">Perjalanan Menghafal Al-Quran</div>
+            <div class="tl-desc">
+              Memasuki empat pusat tahfiz secara berturutan:<br>
+              1. Tahfiz Quran Al-Nuriah, Ampang<br>
+              2. Madrasatul Quran Kubang Bujuk, Terengganu<br>
+              3. <strong style="color:#fff">Maahad Tahfiz Al-Gontory, Rembau</strong> — Khatam Al-Quran pada usia 18 tahun<br>
+              4. Maahad Tahfiz Raudatul Salam, Klang
+            </div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year" style="color:var(--red)">Selepas Tahfiz — UK &amp; COVID-19</div>
+            <div class="tl-title">Personal Shopper di United Kingdom</div>
+            <div class="tl-desc">
+              Bekerja bersama abang sebagai Personal Shopper di bawah syarikat
+              <a href="https://web.facebook.com/teammenyoppinguk" target="_blank">Teammenyoppinguk</a>.
+              Perniagaan terjejas teruk apabila <a href="https://en.wikipedia.org/wiki/COVID-19" target="_blank">COVID-19</a>
+              melanda dunia pada 2019–2020. Kembali ke Malaysia awal 2021.
+            </div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year">2021 — Pelbagai Pekerjaan</div>
+            <div class="tl-title">Dari Kilang hingga Berniaga</div>
+            <div class="tl-desc">Pernah berniaga keropok lekor, pembasuh kereta, dan bekerja di kilang Guardian sebelum memilih jalan lain.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot orange"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <div class="tl-year orange">Pertengahan 2021 — Usia 20 Tahun</div>
+            <div class="tl-title">Mengambil SPM di Maahad Tahfiz Nurid Al-Ilmi</div>
+            <div class="tl-desc">Memilih untuk kembali belajar. Mendapat keputusan SPM <strong style="color:#fff">2A 3B 3C</strong>. Kemudian bekerja setahun sebagai Lalamove Driver sebelum menyambung Diploma di UiTM.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot green"></div></div>
+          <div class="tl-content">
+            <div class="tl-year green">Kini</div>
+            <div class="tl-title">Diploma Pengurusan Maklumat — UiTM Rembau</div>
+            <div class="tl-desc">Menyambung pengajian di <a href="https://nsembilan.uitm.edu.my/rembau/" target="_blank">UiTM Kampus Rembau</a>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <p>&copy; 2026 <span>Ahmad Azim</span>. Hak Cipta Terpelihara.</p>
+    <p style="font-size: 11px; margin-top: 4px; color: #444;">Direka dengan dedikasi di UiTM Kampus Rembau.</p>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════ -->
+
+  <!-- 1. Music Player -->
+  <script>
+    const audio    = document.getElementById('bg-audio');
+    const musicBtn = document.getElementById('music-btn');
+    const playIcon = document.getElementById('play-icon');
+    const muteBtn  = document.getElementById('mute-btn');
+    const volIcon  = document.getElementById('vol-icon');
+
+    audio.volume = 0.4;
+
+    window.addEventListener('load', () => {
+      audio.play().catch(() => {
+        playIcon.className = 'ti ti-player-play-filled';
+        document.addEventListener('click', () => {
+          audio.play();
+          playIcon.className = 'ti ti-player-pause-filled';
+        }, { once: true });
+      });
+    });
+
+    musicBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playIcon.className = 'ti ti-player-pause-filled';
+      } else {
+        audio.pause();
+        playIcon.className = 'ti ti-player-play-filled';
+      }
+    });
+
+    muteBtn.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+      volIcon.className = audio.muted ? 'ti ti-volume-off' : 'ti ti-volume';
+    });
+  </script>
+
+  <!-- 2. Fade-in on Scroll (IntersectionObserver) -->
+  <script>
+    const fadeEls = document.querySelectorAll('.fade-in');
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+
+          // Animate skill bars bila about section masuk viewport
+          entry.target.querySelectorAll('.bar-fill[data-width]').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+          });
+
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    fadeEls.forEach(el => fadeObserver.observe(el));
+  </script>
+
+  <!-- 3. Auto-scroll -->
+  <script>
+    const sections    = ['#home', '#about', '#biodata', '#school'];
+    let   currentIdx  = 0;
+    let   scrollTimer = null;
+    let   isPaused    = false;
+
+    function scrollToNext() {
+      if (isPaused) return;
+      currentIdx = (currentIdx + 1) % sections.length;
+      document.querySelector(sections[currentIdx]).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function startAutoScroll() {
+      scrollTimer = setInterval(scrollToNext, 6500);
+    }
+
+    function pauseAndResume() {
+      clearInterval(scrollTimer);
+      isPaused = true;
+      clearTimeout(window._resumeTimer);
+      window._resumeTimer = setTimeout(() => {
+        isPaused = false;
+        startAutoScroll();
+      }, 10000);
+    }
+
+    startAutoScroll();
+
+    window.addEventListener('wheel',     pauseAndResume, { passive: true });
+    window.addEventListener('touchmove', pauseAndResume, { passive: true });
+    window.addEventListener('keydown',   pauseAndResume);
+
+    // Pause juga bila user klik nav link atau butang scroll
+    document.querySelectorAll('a[href^="#"], button').forEach(el => {
+      el.addEventListener('click', pauseAndResume);
+    });
+  </script>
+
+  <script>
+  // Auto-scroll through sections
+  const sections = ['#home', '#about', '#biodata', '#school'];
+  let currentIndex = 0;
+  let autoScrollTimer;
+  let isPaused = false;
+
+  function scrollToNext() {
+    if (isPaused) return;
+    
+    currentIndex++;
+    if (currentIndex >= sections.length) {
+      currentIndex = 0; // Balik ke atas bila dah habis
+    }
+
+    document.querySelector(sections[currentIndex]).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function startAutoScroll() {
+    autoScrollTimer = setInterval(scrollToNext, 3000); // 3 saat
+  }
+
+  function resetTimer() {
+    clearInterval(autoScrollTimer);
+    isPaused = true;
+
+    // Resume semula selepas 10 saat bila user dah berhenti scroll
+    clearTimeout(window.resumeTimer);
+    window.resumeTimer = setTimeout(() => {
+      isPaused = false;
+      startAutoScroll();
+    }, 10000);
+  }
+
+  // Mula auto-scroll selepas 6.5 saat pertama
+  startAutoScroll();
+
+  // Bila user scroll manual, pause dulu
+  window.addEventListener('wheel', resetTimer, { passive: true });
+  window.addEventListener('touchmove', resetTimer, { passive: true });
+</script>
+
+</body>
+</html>
